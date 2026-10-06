@@ -31,6 +31,12 @@ Add the source to each scene that needs desktop audio, or put it in one scene an
 - While the application is not running, audio played by OBS itself (for example audio monitoring) is left out instead, which avoids a feedback loop.
 - Output is stereo at the OBS sample rate.
 
+## Channel Select filter
+
+The plugin also adds an audio filter called **Channel Select**. It keeps one input of a two-input audio interface and plays it on both sides, discarding the other input.
+
+Use it when the two inputs carry different things, for example a dry instrument on input 1 and a processed signal looped back into input 2. Add an **Audio Input Capture** for the interface, open its **Filters**, add **Channel Select** and pick the input to keep.
+
 ## Limits
 
 - One application per source. Windows excludes a single process tree per capture stream, so adding a second source to exclude a second application does not work: each source would still capture the other's application.
