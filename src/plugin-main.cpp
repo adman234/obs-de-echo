@@ -23,12 +23,10 @@ OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
 void deecho_register_source();
-void channel_filter_register();
 
 bool obs_module_load(void)
 {
 	deecho_register_source();
-	channel_filter_register();
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 	return true;
 }

@@ -11,10 +11,13 @@ It adds an audio source called **Desktop Audio (Exclude App)**. By default it le
 
 ## Install
 
-1. Download the `windows-x64` zip from [Releases](https://github.com/adman234/obs-de-echo/releases), or from the latest run under [Actions](https://github.com/adman234/obs-de-echo/actions).
-2. Close OBS.
-3. Extract the zip into `C:\ProgramData\obs-studio\plugins\` so that you end up with `C:\ProgramData\obs-studio\plugins\obs-de-echo\bin\64bit\obs-de-echo.dll`.
-4. Start OBS.
+1. Download `obs-de-echo-<version>-windows-x64-Installer.exe` from [Releases](https://github.com/adman234/obs-de-echo/releases).
+2. Close OBS and run the installer. It is not code signed, so Windows SmartScreen asks you to confirm with **More info > Run anyway**.
+3. Start OBS.
+
+The installer places the plugin in `C:\ProgramData\obs-studio\plugins\obs-de-echo`. To remove it, use **Installed apps** in Windows Settings.
+
+To install by hand instead, extract the `windows-x64` zip into `C:\ProgramData\obs-studio\plugins\`.
 
 ## Setup
 
@@ -30,12 +33,6 @@ Add the source to each scene that needs desktop audio, or put it in one scene an
 - While the application is not running, the source captures all desktop audio. It switches over within about half a second of the application starting or closing.
 - While the application is not running, audio played by OBS itself (for example audio monitoring) is left out instead, which avoids a feedback loop.
 - Output is stereo at the OBS sample rate.
-
-## Channel Select filter
-
-The plugin also adds an audio filter called **Channel Select**. It keeps one input of a two-input audio interface and plays it on both sides, discarding the other input.
-
-Use it when the two inputs carry different things, for example a dry instrument on input 1 and a processed signal looped back into input 2. Add an **Audio Input Capture** for the interface, open its **Filters**, add **Channel Select** and pick the input to keep.
 
 ## Limits
 

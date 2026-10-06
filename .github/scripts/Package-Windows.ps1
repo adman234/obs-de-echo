@@ -53,6 +53,7 @@ function Package {
         ErrorAction = 'SilentlyContinue'
         Path = @(
             "${ProjectRoot}/release/${ProductName}-*-windows-*.zip"
+            "${ProjectRoot}/release/${ProductName}-*-windows-*.exe"
         )
     }
 
@@ -66,6 +67,28 @@ function Package {
         Verbose = ($Env:CI -ne $null)
     }
     Compress-Archive -Force @CompressArgs
+    Log-Group
+
+    Log-Group "Building installer for ${ProductName}..."
+    $Iscc = "${env:ProgramFiles(x86)}/Inno Setup 6/ISCC.exe"
+    if ( ! ( Test-Path -Path $Iscc ) ) {
+        choco install innosetup --yes --no-progress
+    }
+    $IsccArgs = @(
+        "/DAppName=$($BuildSpec.displayName)"
+        "/DAppVersion=${ProductVersion}"
+        "/DAppPublisher=$($BuildSpec.author)"
+        "/DAppURL=$($BuildSpec.website)"
+        "/DPluginName=${ProductName}"
+        "/DSourceDir=$(Join-Path $ProjectRoot "release" $Configuration $ProductName)"
+        "/O$(Join-Path $ProjectRoot "release")"
+        "/F${OutputName}-Installer"
+        (Join-Path $ProjectRoot "cmake" "windows" "resources" "installer-Windows.iss")
+    )
+    & $Iscc @IsccArgs
+    if ( $LASTEXITCODE -ne 0 ) {
+        throw "Inno Setup failed with exit code ${LASTEXITCODE}"
+    }
     Log-Group
 }
 
