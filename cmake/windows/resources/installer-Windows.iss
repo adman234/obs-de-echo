@@ -12,6 +12,9 @@ AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}
 DefaultDirName={commonappdata}\obs-studio\plugins\{#PluginName}
 DisableDirPage=yes
+; Always install to the folder named after the plugin, even when upgrading
+; an install made under the old name (obs-de-echo).
+UsePreviousAppDir=no
 DisableProgramGroupPage=yes
 PrivilegesRequired=admin
 ArchitecturesAllowed=x64compatible
@@ -25,6 +28,10 @@ RestartApplications=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+
+[InstallDelete]
+; Remove the install from before the rename so OBS does not load two copies.
+Type: filesandordirs; Name: "{commonappdata}\obs-studio\plugins\obs-de-echo"
 
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "*.pdb"; Flags: ignoreversion recursesubdirs createallsubdirs
