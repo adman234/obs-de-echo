@@ -1,4 +1,4 @@
-# OBS De-Echo
+# OBS Desktop Audio Exclude
 
 An OBS Studio plugin for Windows that captures all desktop audio except one application.
 
@@ -11,13 +11,17 @@ It adds an audio source called **Desktop Audio (Exclude App)**. By default it le
 
 ## Install
 
-1. Download `obs-de-echo-<version>-windows-x64-Installer.exe` from [Releases](https://github.com/adman234/obs-de-echo/releases).
+1. Download `obs-desktop-audio-exclude-<version>-windows-x64-Installer.exe` from [Releases](https://github.com/adman234/obs-desktop-audio-exclude/releases).
 2. Close OBS and run the installer. It is not code signed, so Windows SmartScreen asks you to confirm with **More info > Run anyway**.
 3. Start OBS.
 
-The installer places the plugin in `C:\ProgramData\obs-studio\plugins\obs-de-echo`. To remove it, use **Installed apps** in Windows Settings.
+The installer places the plugin in `C:\ProgramData\obs-studio\plugins\obs-desktop-audio-exclude`. To remove it, use **Installed apps** in Windows Settings.
 
 To install by hand instead, extract the `windows-x64` zip into `C:\ProgramData\obs-studio\plugins\`.
+
+### Upgrading from OBS De-Echo
+
+This plugin used to be called OBS De-Echo. The installer removes the old `obs-de-echo` plugin folder automatically, and existing **Desktop Audio (Exclude App)** sources in your scenes keep working. If you installed by hand, delete `C:\ProgramData\obs-studio\plugins\obs-de-echo` yourself so OBS does not load two copies.
 
 ## Setup
 

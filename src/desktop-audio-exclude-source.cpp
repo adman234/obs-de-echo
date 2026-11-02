@@ -1,5 +1,5 @@
 /*
-OBS De-Echo
+OBS Desktop Audio Exclude
 Copyright (C) 2026 adman234
 
 This program is free software; you can redistribute it and/or modify
@@ -137,7 +137,7 @@ DWORD find_root_process(const std::wstring &exe)
 	return matches.empty() ? 0 : matches.begin()->first;
 }
 
-struct DeEchoSource {
+struct DesktopAudioExcludeSource {
 	obs_source_t *source;
 
 	std::mutex settings_mutex;
@@ -154,7 +154,7 @@ struct DeEchoSource {
 	bool logged_failure = false;
 	std::vector<float> silence;
 
-	DeEchoSource(obs_source_t *source_, obs_data_t *settings) : source(source_)
+	DesktopAudioExcludeSource(obs_source_t *source_, obs_data_t *settings) : source(source_)
 	{
 		Update(settings);
 		stop_event = CreateEventW(nullptr, TRUE, FALSE, nullptr);
@@ -162,7 +162,7 @@ struct DeEchoSource {
 		thread = std::thread([this] { Run(); });
 	}
 
-	~DeEchoSource()
+	~DesktopAudioExcludeSource()
 	{
 		SetEvent(stop_event);
 		if (thread.joinable())
@@ -313,7 +313,7 @@ struct DeEchoSource {
 
 	void Run()
 	{
-		os_set_thread_name("obs-de-echo capture");
+		os_set_thread_name("obs-desktop-audio-exclude capture");
 		HRESULT com = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 		const HANDLE handles[] = {stop_event, audio_event};
@@ -412,38 +412,39 @@ std::set<std::string> list_window_executables()
 	return names;
 }
 
-const char *deecho_get_name(void *)
+const char *desktop_audio_exclude_get_name(void *)
 {
-	return obs_module_text("DeEcho.Source");
+	return obs_module_text("DesktopAudioExclude.Source");
 }
 
-void *deecho_create(obs_data_t *settings, obs_source_t *source)
+void *desktop_audio_exclude_create(obs_data_t *settings, obs_source_t *source)
 {
-	return new DeEchoSource(source, settings);
+	return new DesktopAudioExcludeSource(source, settings);
 }
 
-void deecho_destroy(void *data)
+void desktop_audio_exclude_destroy(void *data)
 {
-	delete static_cast<DeEchoSource *>(data);
+	delete static_cast<DesktopAudioExcludeSource *>(data);
 }
 
-void deecho_update(void *data, obs_data_t *settings)
+void desktop_audio_exclude_update(void *data, obs_data_t *settings)
 {
-	static_cast<DeEchoSource *>(data)->Update(settings);
+	static_cast<DesktopAudioExcludeSource *>(data)->Update(settings);
 }
 
-void deecho_get_defaults(obs_data_t *settings)
+void desktop_audio_exclude_get_defaults(obs_data_t *settings)
 {
 	obs_data_set_default_string(settings, SETTING_EXECUTABLE, DEFAULT_EXECUTABLE);
 }
 
-obs_properties_t *deecho_get_properties(void *)
+obs_properties_t *desktop_audio_exclude_get_properties(void *)
 {
 	obs_properties_t *props = obs_properties_create();
 
-	obs_property_t *list = obs_properties_add_list(props, SETTING_EXECUTABLE, obs_module_text("DeEcho.Executable"),
+	obs_property_t *list = obs_properties_add_list(props, SETTING_EXECUTABLE,
+						       obs_module_text("DesktopAudioExclude.Executable"),
 						       OBS_COMBO_TYPE_EDITABLE, OBS_COMBO_FORMAT_STRING);
-	obs_property_set_long_description(list, obs_module_text("DeEcho.Executable.Tooltip"));
+	obs_property_set_long_description(list, obs_module_text("DesktopAudioExclude.Executable.Tooltip"));
 
 	std::set<std::string> names = list_window_executables();
 	names.insert(DEFAULT_EXECUTABLE);
@@ -455,18 +456,20 @@ obs_properties_t *deecho_get_properties(void *)
 
 } // namespace
 
-void deecho_register_source()
+void desktop_audio_exclude_register_source()
 {
 	struct obs_source_info info = {};
+	// Kept from the plugin's old name (obs-de-echo). Scenes store sources by
+	// this ID, so changing it would break existing setups.
 	info.id = "deecho_desktop_audio";
 	info.type = OBS_SOURCE_TYPE_INPUT;
 	info.output_flags = OBS_SOURCE_AUDIO | OBS_SOURCE_DO_NOT_DUPLICATE;
-	info.get_name = deecho_get_name;
-	info.create = deecho_create;
-	info.destroy = deecho_destroy;
-	info.update = deecho_update;
-	info.get_defaults = deecho_get_defaults;
-	info.get_properties = deecho_get_properties;
+	info.get_name = desktop_audio_exclude_get_name;
+	info.create = desktop_audio_exclude_create;
+	info.destroy = desktop_audio_exclude_destroy;
+	info.update = desktop_audio_exclude_update;
+	info.get_defaults = desktop_audio_exclude_get_defaults;
+	info.get_properties = desktop_audio_exclude_get_properties;
 	info.icon_type = OBS_ICON_TYPE_AUDIO_OUTPUT;
 
 	obs_register_source(&info);

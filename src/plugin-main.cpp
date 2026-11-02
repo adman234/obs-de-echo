@@ -1,5 +1,5 @@
 /*
-OBS De-Echo
+OBS Desktop Audio Exclude
 Copyright (C) 2026 adman234
 
 This program is free software; you can redistribute it and/or modify
@@ -22,11 +22,11 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
-void deecho_register_source();
+void desktop_audio_exclude_register_source();
 
 bool obs_module_load(void)
 {
-	deecho_register_source();
+	desktop_audio_exclude_register_source();
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 	return true;
 }

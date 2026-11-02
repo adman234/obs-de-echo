@@ -30,13 +30,13 @@
     },
     "platformConfig": {
         "macos": {
-            "bundleId": "com.adman234.obs-de-echo"
+            "bundleId": "com.adman234.obs-desktop-audio-exclude"
         }
     },
-    "name": "obs-de-echo",
-    "displayName": "OBS De-Echo",
+    "name": "obs-desktop-audio-exclude",
+    "displayName": "OBS Desktop Audio Exclude",
     "version": "0.1.0",
     "author": "adman234",
-    "website": "https://github.com/adman234/obs-de-echo",
+    "website": "https://github.com/adman234/obs-desktop-audio-exclude",
     "email": "adman234@users.noreply.github.com"
 }

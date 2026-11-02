@@ -1,5 +1,5 @@
 /*
-OBS De-Echo
+OBS Desktop Audio Exclude
 Copyright (C) 2026 adman234
 
 This program is free software; you can redistribute it and/or modify
